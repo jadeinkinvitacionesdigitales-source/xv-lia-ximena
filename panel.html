@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel de invitados · XV Lia Ximena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--profundo:#0f6b70;--medio:#1f8f8f;--turquesa:#3fc4bd;--agua:#c9f3ec;--agua-suave:#e6fbf7;--texto:#17484c;--suave:#5b7f82;--borde:#cfe7e3;--rojo:#c0504d}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Montserrat',sans-serif;color:var(--texto);background:linear-gradient(180deg,#e6fbf7,#c9f3ec 60%,#a9e3db) fixed;min-height:100vh;padding:24px 16px 60px}
+  .contenedor{max-width:860px;margin:0 auto}
+  header{text-align:center;margin-bottom:22px}
+  header h1{font-family:'Great Vibes',cursive;font-weight:400;font-size:3rem;color:var(--profundo);line-height:1.1}
+  header p{font-family:'Cormorant Garamond',serif;font-size:1.15rem;letter-spacing:.2em;text-transform:uppercase;color:var(--medio)}
+  .caja{background:rgba(255,255,255,.78);border:1px solid #fff;border-radius:20px;padding:20px;box-shadow:0 10px 30px rgba(15,107,112,.12);margin-bottom:18px}
+  .caja h2{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--profundo);margin-bottom:12px}
+  label{display:block;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--suave);margin-bottom:6px}
+  input,textarea{width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--borde);font:inherit;font-size:.95rem;color:var(--texto);background:#fff}
+  input:focus,textarea:focus{outline:none;border-color:var(--turquesa);box-shadow:0 0 0 3px rgba(63,196,189,.2)}
+  textarea{resize:vertical;min-height:84px;line-height:1.45}
+  .fila{display:grid;grid-template-columns:1fr 110px 150px auto;gap:10px;align-items:end}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 18px;border-radius:30px;border:0;cursor:pointer;
+    font:inherit;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,var(--turquesa),var(--medio));white-space:nowrap}
+  .btn:hover{filter:brightness(1.05)}
+  .btn.claro{background:#fff;color:var(--medio);border:1px solid var(--borde)}
+  .btn.wa{background:#25a35a}
+  .btn.peligro{background:#fff;color:var(--rojo);border:1px solid #efcfce}
+  .btn.mini{padding:7px 12px;font-size:.68rem}
+  .resumen{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:18px}
+  .dato{background:rgba(255,255,255,.78);border-radius:16px;padding:12px 20px;text-align:center;min-width:130px}
+  .dato b{display:block;font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--profundo);line-height:1}
+  .dato span{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--suave)}
+  .barra{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .barra input{max-width:260px}
+  .lista{display:flex;flex-direction:column;gap:10px}
+  .invitado{display:grid;grid-template-columns:1fr 84px auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--borde);border-radius:14px;background:#fff}
+  .invitado input{padding:8px 10px}
+  .invitado .acciones{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+  .invitado .enlace{grid-column:1/-1;font-size:.72rem;color:var(--suave);word-break:break-all}
+  .vacio{text-align:center;color:var(--suave);padding:24px;font-style:italic}
+  .ayuda{font-size:.78rem;color:var(--suave);margin-top:8px;line-height:1.5}
+  .aviso{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:var(--profundo);color:#fff;padding:12px 22px;border-radius:30px;font-size:.85rem;transition:transform .3s;z-index:9}
+  .aviso.ver{transform:translateX(-50%) translateY(0)}
+  @media (max-width:640px){
+    .fila{grid-template-columns:1fr 1fr}
+    .fila .nombre-campo{grid-column:1/-1}
+    .fila .btn{grid-column:1/-1}
+    .invitado{grid-template-columns:1fr 70px}
+    .invitado .acciones{grid-column:1/-1;justify-content:flex-start}
+  }
+</style>
+</head>
+<body>
+<div class="contenedor">
+  <header>
+    <h1>Lia Ximena</h1>
+    <p>Panel de invitados · Mis XV Años</p>
+  </header>
+
+  <div class="resumen">
+    <div class="dato"><b id="totInvitados">0</b><span>Invitaciones</span></div>
+    <div class="dato"><b id="totPuestos">0</b><span>Puestos</span></div>
+  </div>
+
+  <div class="caja">
+    <h2>Agregar invitado</h2>
+    <form class="fila" id="formNuevo">
+      <div class="nombre-campo">
+        <label for="nNombre">Nombre en la invitación</label>
+        <input id="nNombre" placeholder="Ej. Familia Pérez" required>
+      </div>
+      <div>
+        <label for="nPuestos">Puestos</label>
+        <input id="nPuestos" type="number" min="1" max="20" value="2" required>
+      </div>
+      <div>
+        <label for="nTel">WhatsApp (opcional)</label>
+        <input id="nTel" inputmode="tel" placeholder="6000-0000">
+      </div>
+      <button class="btn" type="submit">+ Agregar</button>
+    </form>
+  </div>
+
+  <div class="caja">
+    <div class="barra">
+      <h2 style="margin:0">Invitados</h2>
+      <input id="buscar" placeholder="Buscar…">
+    </div>
+    <div class="lista" id="lista"></div>
+  </div>
+
+  <div class="caja">
+    <h2>Mensaje para enviar</h2>
+    <label for="plantilla">Texto (usa {nombre}, {puestos} y {enlace})</label>
+    <textarea id="plantilla"></textarea>
+    <div class="barra" style="margin:12px 0 0">
+      <button class="btn claro mini" id="restaurar" type="button">Restaurar texto</button>
+    </div>
+  </div>
+
+  <div class="caja">
+    <h2>Respaldo</h2>
+    <div class="barra" style="justify-content:flex-start;margin:0">
+      <button class="btn claro" id="exportar" type="button">Descargar lista (CSV)</button>
+      <button class="btn claro" id="importarBtn" type="button">Cargar lista (CSV)</button>
+      <input type="file" id="importar" accept=".csv,text/csv" hidden>
+    </div>
+    <p class="ayuda">La lista se guarda en este navegador. Para usarla en otro teléfono o computadora, descarga el CSV aquí y cárgalo allá.</p>
+  </div>
+</div>
+<div class="aviso" id="aviso"></div>
+
+<script>
+  const BASE = 'https://jadeinkinvitacionesdigitales-source.github.io/xv-lia-ximena/';
+  const CLAVE = 'panel-xv-lia-ximena';
+  const TEXTO = '¡Hola {nombre}! 🐚\nCon mucho cariño te invitamos a celebrar los XV años de Lia Ximena el sábado 16 de enero de 2027.\nHemos reservado {puestos} en tu honor.\n\nAquí está tu invitación:\n{enlace}';
+
+  const leer = () => { try { return JSON.parse(localStorage.getItem(CLAVE)) || {}; } catch { return {}; } };
+  const datos = Object.assign({ invitados: [], plantilla: TEXTO }, leer());
+  const guardar = () => { try { localStorage.setItem(CLAVE, JSON.stringify(datos)); } catch {} };
+
+  const enlace = g => BASE + '?' + new URLSearchParams({ i: g.nombre, p: g.puestos });
+  const puestosTxt = n => n == 1 ? '1 puesto' : n + ' puestos';
+  const mensaje = g => datos.plantilla.replaceAll('{nombre}', g.nombre).replaceAll('{puestos}', puestosTxt(g.puestos)).replaceAll('{enlace}', enlace(g));
+  const telefono = t => { const d = (t || '').replace(/\D/g, ''); return d.length === 8 ? '507' + d : d; };
+
+  const aviso = t => { const a = document.getElementById('aviso'); a.textContent = t; a.classList.add('ver'); clearTimeout(aviso.t); aviso.t = setTimeout(() => a.classList.remove('ver'), 1800); };
+  const copiar = async (t, ok) => { try { await navigator.clipboard.writeText(t); aviso(ok); } catch { prompt('Copia el texto:', t); } };
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  function pintar() {
+    const filtro = document.getElementById('buscar').value.trim().toLowerCase();
+    const lista = document.getElementById('lista');
+    const vis = datos.invitados.map((g, k) => [g, k]).filter(([g]) => g.nombre.toLowerCase().includes(filtro));
+    lista.innerHTML = vis.length ? vis.map(([g, k]) => `
+      <div class="invitado" data-k="${k}">
+        <input value="${esc(g.nombre)}" data-campo="nombre" aria-label="Nombre">
+        <input type="number" min="1" max="20" value="${g.puestos}" data-campo="puestos" aria-label="Puestos">
+        <div class="acciones">
+          <button class="btn mini wa" data-acc="wa">WhatsApp</button>
+          <button class="btn mini" data-acc="copiar">Copiar enlace</button>
+          <button class="btn mini claro" data-acc="ver">Ver</button>
+          <button class="btn mini peligro" data-acc="borrar">Quitar</button>
+        </div>
+        <div class="enlace">${esc(enlace(g))}${g.tel ? ' · 📱 ' + esc(g.tel) : ''}</div>
+      </div>`).join('') : `<p class="vacio">${datos.invitados.length ? 'Nadie coincide con la búsqueda.' : 'Aún no hay invitados. Agrega el primero arriba.'}</p>`;
+    document.getElementById('totInvitados').textContent = datos.invitados.length;
+    document.getElementById('totPuestos').textContent = datos.invitados.reduce((s, g) => s + (+g.puestos || 0), 0);
+  }
+
+  document.getElementById('formNuevo').addEventListener('submit', e => {
+    e.preventDefault();
+    const nombre = document.getElementById('nNombre').value.trim();
+    const puestos = Math.max(1, parseInt(document.getElementById('nPuestos').value, 10) || 1);
+    if (!nombre) return;
+    datos.invitados.push({ nombre, puestos, tel: document.getElementById('nTel').value.trim() });
+    guardar(); pintar();
+    document.getElementById('nNombre').value = ''; document.getElementById('nTel').value = '';
+    document.getElementById('nNombre').focus();
+    aviso('Invitado agregado');
+  });
+
+  document.getElementById('lista').addEventListener('change', e => {
+    const fila = e.target.closest('.invitado'), campo = e.target.dataset.campo;
+    if (!fila || !campo) return;
+    const g = datos.invitados[fila.dataset.k];
+    g[campo] = campo === 'puestos' ? Math.max(1, parseInt(e.target.value, 10) || 1) : e.target.value.trim() || g.nombre;
+    guardar(); pintar(); aviso('Cambios guardados');
+  });
+
+  document.getElementById('lista').addEventListener('click', e => {
+    const acc = e.target.dataset.acc; if (!acc) return;
+    const k = +e.target.closest('.invitado').dataset.k, g = datos.invitados[k];
+    if (acc === 'copiar') copiar(enlace(g), 'Enlace copiado');
+    if (acc === 'ver') window.open(enlace(g), '_blank');
+    if (acc === 'wa') window.open('https://wa.me/' + telefono(g.tel) + '?text=' + encodeURIComponent(mensaje(g)), '_blank');
+    if (acc === 'borrar' && confirm(`¿Quitar a ${g.nombre} de la lista?`)) { datos.invitados.splice(k, 1); guardar(); pintar(); }
+  });
+
+  document.getElementById('buscar').addEventListener('input', pintar);
+
+  const plantilla = document.getElementById('plantilla');
+  plantilla.value = datos.plantilla;
+  plantilla.addEventListener('input', () => { datos.plantilla = plantilla.value; guardar(); });
+  document.getElementById('restaurar').addEventListener('click', () => { plantilla.value = datos.plantilla = TEXTO; guardar(); aviso('Texto restaurado'); });
+
+  // Respaldo en CSV: nombre, puestos, whatsapp
+  const celda = t => /[",\n;]/.test(t) ? '"' + String(t).replace(/"/g, '""') + '"' : t;
+  document.getElementById('exportar').addEventListener('click', () => {
+    const filas = [['Nombre', 'Puestos', 'WhatsApp', 'Enlace'], ...datos.invitados.map(g => [g.nombre, g.puestos, g.tel || '', enlace(g)])];
+    const blob = new Blob(['\ufeff' + filas.map(f => f.map(celda).join(',')).join('\n')], { type: 'text/csv;charset=utf-8' });
+    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: 'invitados-xv-lia-ximena.csv' });
+    a.click(); URL.revokeObjectURL(a.href);
+  });
+  document.getElementById('importarBtn').addEventListener('click', () => document.getElementById('importar').click());
+  document.getElementById('importar').addEventListener('change', async e => {
+    const f = e.target.files[0]; if (!f) return;
+    const texto = (await f.text()).replace(/^\ufeff/, '');
+    const sep = texto.split('\n')[0].includes(';') ? ';' : ',';
+    const filas = texto.split(/\r?\n/).filter(Boolean).map(l => {
+      const out = []; let cur = '', q = false;
+      for (const c of l) { if (c === '"') q = !q; else if (c === sep && !q) { out.push(cur); cur = ''; } else cur += c; }
+      return out.concat(cur).map(x => x.replace(/""/g, '"').trim());
+    });
+    const nuevos = filas.filter(r => r[0] && r[0].toLowerCase() !== 'nombre')
+      .map(r => ({ nombre: r[0], puestos: Math.max(1, parseInt(r[1], 10) || 1), tel: r[2] || '' }));
+    if (!nuevos.length) return aviso('El archivo no tiene invitados');
+    if (datos.invitados.length && !confirm(`Se agregarán ${nuevos.length} invitados a la lista actual. ¿Continuar?`)) return;
+    datos.invitados.push(...nuevos); guardar(); pintar(); aviso(nuevos.length + ' invitados cargados');
+    e.target.value = '';
+  });
+
+  pintar();
+</script>
+</body>
+</html>

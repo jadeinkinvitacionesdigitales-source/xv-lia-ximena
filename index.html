@@ -124,6 +124,14 @@
   .nota{font-size:.8rem;color:var(--agua);margin-top:12px;font-style:italic}
 
 
+  /* Pase personalizado (?i=nombre&p=puestos) */
+  .pase{display:none;margin-top:22px;padding:20px 16px;border-radius:18px;border:1px dashed rgba(255,255,255,.7);background:rgba(255,255,255,.08)}
+  .pase.activo{display:block}
+  .pase .etiqueta-clara{margin-top:0;font-size:.8rem}
+  .pase .invitado{font-family:'Great Vibes',cursive;font-size:2.4rem;color:var(--blanco);line-height:1.2;margin:6px 0}
+  .pase .puestos{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--agua-suave);letter-spacing:.08em}
+  .pase .puestos b{font-size:1.6rem;color:var(--blanco)}
+
   /* Lluvia de sobres */
   .regalo-icono{width:46px;height:46px;color:var(--agua-suave);margin:0 auto 6px;display:block}
   .opcion-regalo{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.3)}
@@ -243,6 +251,11 @@
       <p class="texto">y el amor de mis padres</p>
       <p class="padres">Cecilio Arauz<br>&amp;<br>Jazmin Cedeño de Arauz</p>
       <p class="texto" style="margin-top:14px">tenemos el honor de invitarte a celebrar mis quince años en una noche mágica bajo el mar.</p>
+      <div class="pase" id="pase">
+        <p class="etiqueta-clara">Pase especial para</p>
+        <p class="invitado" id="paseNombre"></p>
+        <p class="puestos" id="pasePuestos"></p>
+      </div>
     </div>
   </section>
 
@@ -433,6 +446,24 @@
     '&location=' + encodeURIComponent('Hotel Summit Rainforest, Salón Greenhouse, Gamboa');
 
   // Confirmación por WhatsApp
+  // Pase personalizado: el enlace trae ?i=nombre&p=puestos
+  const q = new URLSearchParams(location.search);
+  const invitado = (q.get('i') || '').trim(), puestos = parseInt(q.get('p'), 10);
+  if (invitado) {
+    document.getElementById('paseNombre').textContent = invitado;
+    document.getElementById('nombre').value = invitado;
+    document.getElementById('pase').classList.add('activo');
+  }
+  if (puestos > 0) {
+    document.getElementById('pasePuestos').innerHTML = puestos === 1
+      ? 'Hemos reservado <b>1</b> puesto en tu honor'
+      : `Hemos reservado <b>${puestos}</b> puestos en tu honor`;
+    document.getElementById('pase').classList.add('activo');
+    const sel = document.getElementById('personas');
+    sel.innerHTML = Array.from({ length: puestos }, (_, k) => `<option>${k + 1}</option>`).join('');
+    sel.value = puestos;
+  }
+
   document.getElementById('formConfirmar').addEventListener('submit', e => {
     e.preventDefault();
     const nombre = document.getElementById('nombre').value.trim();
